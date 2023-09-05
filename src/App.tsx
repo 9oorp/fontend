@@ -1,5 +1,9 @@
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { useEffect, useState } from "react";
+import Main from "./pages/Main";
+import Layout from "./components/Layout";
+import PostRegister from "./pages/PostRegister";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -11,9 +15,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">{message}</header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Main />} />
+        <Route path="/PostRegister" element={<PostRegister />} />
+      </Route>
+    </Routes>
   );
 }
 
