@@ -3,18 +3,17 @@ import store from "../store";
 import logo from "../assets/logo.png";
 import { ReactComponent as Hamburger } from "../assets/burger-menu.svg";
 import { Link } from "react-router-dom";
-import LoginModal from "./auth/loginModal";
-
-// console.log(store.getState().isLoggedIn);
-// store.getState().isLoggedIn;
+import AuthModal from "./auth/authModal";
+import SideMenu from "./auth/sideMenu";
 
 const Header = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const showModal = () => {
     setModalOpen(true);
   };
   const handleOutsideClick = (event: any) => {
-    // Check if the event's target matches the outer div itself
     if (event.target === event.currentTarget) {
       setModalOpen(false);
     }
@@ -23,7 +22,11 @@ const Header = () => {
     <>
       <div className="h-12 bg-white flex justify-center items-center sticky w-screen left-0 top-0 z-[89] ">
         <div className="flex w-full justify-between items-center  max-w-7xl p-5 ">
-          <div className="cursor-pointer">
+          <div
+            className="cursor-pointer"
+            onMouseOver={() => setMenuOpen(true)}
+            onMouseOut={() => setMenuOpen(false)}
+          >
             <Hamburger />
           </div>
           <Link to={"/"}>
@@ -41,12 +44,13 @@ const Header = () => {
       </div>
       {modalOpen && (
         <div
-          onClick={handleOutsideClick}
+          onMouseDown={handleOutsideClick}
           className="w-full h-full backdrop-blur-sm bg-black bg-opacity-20 top-0 bottmom-14 fixed flex justify-center items-center z-[90]"
         >
-          <LoginModal setModalOpen={setModalOpen} />
+          <AuthModal setModalOpen={setModalOpen} />
         </div>
       )}
+      {!menuOpen && <SideMenu setMenuOpen={setMenuOpen} />}
     </>
   );
 };

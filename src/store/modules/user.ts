@@ -8,8 +8,10 @@ export type UserState = {
 
 // 액션 Payload 타입
 export type LoginPayload = {
-  userId: string;
-  password: string;
+  accountId: string;
+  memberName: string;
+  iat: string;
+  exp: string;
 };
 
 // 초기 상태
