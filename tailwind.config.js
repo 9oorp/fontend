@@ -8,6 +8,8 @@ module.exports = {
         "my-blue": "#5094FA",
         "my-lblue": "#609ae9",
         "my-border": "#ced0da",
+        "my-green": "#00A881",
+        "my-textgreen": "#08785E",
       },
     },
   },

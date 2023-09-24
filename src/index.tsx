@@ -8,9 +8,10 @@ import { BrowserRouter } from "react-router-dom";
 import { loginAction } from "./store/modules/user";
 import parseJwt from "./libs/parseJwt";
 
-if (localStorage.accessToken) {
-  console.log(parseJwt(localStorage.accessToken).password);
-
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+if (localStorage.accessToken && localStorage.accessToken !== "undefined ") {
   store.dispatch(
     loginAction({
       accountId: parseJwt(localStorage.accessToken).accountId,
@@ -21,9 +22,6 @@ if (localStorage.accessToken) {
   );
 }
 console.log(store.getState().userData);
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
 root.render(
   <React.StrictMode>
     <Provider store={store}>

@@ -3,11 +3,11 @@ import Card from "../components/card";
 import MultiSelect from "../components/multiSelect";
 import SearchBar from "../components/searchBar";
 import Toggle from "../components/toggle";
+import Item from "../components/item";
 
 const Main = () => {
   const [selected, setSelected] = useState<string[]>([]);
   const [state, setState] = useState(false);
-  console.log(state);
   const data = [
     {
       title: "제목",
@@ -34,15 +34,21 @@ const Main = () => {
           <SearchBar />
           <MultiSelect
             options={options}
+            placeholder="모집 검색"
             selectedValues={selected}
             onChange={setSelected}
+            name="모집검색"
           />
           <div className="flex">
             <Toggle onToggle={setState} />
             <span>모집중만 보기</span>
           </div>
         </div>
-        <div>{selected}</div>
+        <div className="py-3 flex gap-3">
+          {selected.map((item) => (
+            <Item text={item} />
+          ))}
+        </div>
         <div className="grid grid-cols-4 gap-20">
           <Card />
           <Card />

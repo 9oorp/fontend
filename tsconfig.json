@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "typeRoots": ["src/types"]
   },
-  "include": ["src"]
+  "include": ["src", "declarations/**/*.d.ts"]
 }

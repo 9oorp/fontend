@@ -2,14 +2,14 @@ import { useState } from "react";
 import store from "../store";
 import logo from "../assets/logo.png";
 import { ReactComponent as Hamburger } from "../assets/burger-menu.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthModal from "./auth/authModal";
 import SideMenu from "./auth/sideMenu";
 
 const Header = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
   const showModal = () => {
     setModalOpen(true);
   };
@@ -34,7 +34,12 @@ const Header = () => {
           </Link>
 
           {store.getState().isLoggedIn ? (
-            <div>글작성</div>
+            <div
+              className="cursor-pointer"
+              onClick={() => navigate("/PostRegister")}
+            >
+              글작성
+            </div>
           ) : (
             <span className="cursor-pointer" onClick={() => showModal()}>
               로그인
@@ -50,7 +55,7 @@ const Header = () => {
           <AuthModal setModalOpen={setModalOpen} />
         </div>
       )}
-      {!menuOpen && <SideMenu setMenuOpen={setMenuOpen} />}
+      {menuOpen && <SideMenu setMenuOpen={setMenuOpen} />}
     </>
   );
 };
