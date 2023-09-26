@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { ErrorResponse, postDetail } from "../types";
 import store from "../store";
 import SingleSelect from "../components/singleSelect";
+import JavaImg from "../assets/Java.png";
 
 const PostDetail = () => {
   const { id } = useParams<string>();
@@ -12,12 +13,13 @@ const PostDetail = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const user = store.getState().userData;
-  const [selected, setSelected] = useState<string>("");
-  console.log(post?.status);
+  const [selected, setSelected] = useState<string>(post ? post.status : "");
+  console.log(selected);
   const options = [
     { value: "모집중", label: "모집중" },
-    { value: "모집마감", label: "모집마감" },
+    { value: "모집종료", label: "모집종료" },
   ];
+  const stack = ["Java", "React"];
 
   const fetchData = async () => {
     try {
@@ -49,7 +51,6 @@ const PostDetail = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-  console.log(post?.memberName, user.memberName);
   return (
     <div className="h-screen flex justify-center">
       <div className="flex w-full max-w-7xl flex-col px-10">
@@ -92,15 +93,29 @@ const PostDetail = () => {
                   <div className="pl-4"> {post.recruitNum}명</div>
                 </div>
                 <div className="flex flex-col">
-                  <div className="text-gray-400">what we do</div>
-                  <div className="pl-4"> {post.subject}</div>
+                  <div className="text-gray-400">기술 스택</div>
+                  <div className="pl-4 flex gap-2">
+                    {stack.map((item, index) => (
+                      <img width="40px" src={`../assets/${item}.png`} />
+                    ))}
+                  </div>
                 </div>
               </div>
               <div>
-                <div className="text-gray-400">기술 스택</div>
-                <div className="pl-4"> {post.stack}</div>
+                <div className="text-gray-400">what we do</div>
+                <div className="pl-4"> {post.subject}</div>
               </div>
             </div>
+            {user.memberName === post?.memberName && (
+              <div className="flex justify-center items-center py-5">
+                <button
+                  className="w-fit bg-my-blue rounded-md text-my-color p-2"
+                  onClick={() => console.log("1")}
+                >
+                  수정하기
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

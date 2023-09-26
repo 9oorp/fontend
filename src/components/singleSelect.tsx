@@ -19,7 +19,7 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
   };
 
   const handleOptionClick = (option: Option) => {
-    onChange(option.value);
+    onChange(option.label);
     setIsOpen(false);
   };
 

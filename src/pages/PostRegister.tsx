@@ -18,6 +18,10 @@ const curriculumIdMap: { [key: string]: number } = {
   "쿠버네티스 과정": 4,
   "AI자연어처리 과정": 5,
 };
+const classificationIdMap: { [key: string]: number } = {
+  스터디: 0,
+  프로젝트: 1,
+};
 const userId = store.getState().userData && store.getState().userData.accountId;
 const PostRegister = () => {
   const [formData, setFormData] = useState({
@@ -93,17 +97,18 @@ const PostRegister = () => {
       "Content-Type": "application/json",
     };
     const curriculumId = curriculumIdMap[formData.curriculumId];
+    const classificationId = classificationIdMap[formData.classification];
 
     // 요청 본문 데이터
     const requestData = {
-      classification: formData.classification,
+      classification: classificationId,
       subject: arrToString(formData.subject), //
       stack: arrToString(formData.stack), //
       recruitNum: +formData.recruitNum,
       curriculumId: curriculumId,
       contactUrl: formData.contactUrl,
       title: formData.title,
-      status: "모집중",
+      status: 1,
       content: htmlContent,
       memberId: userId,
     };
@@ -154,8 +159,8 @@ const PostRegister = () => {
                   handleSingleSelectChange(selected, "classification")
                 }
                 options={[
-                  { value: "스터디", label: "스터디" },
-                  { value: "프로젝트", label: "프로젝트" },
+                  { value: "0", label: "스터디" },
+                  { value: "1", label: "프로젝트" },
                 ]}
                 placeholder="스터디/프로젝트"
               />
@@ -192,11 +197,11 @@ const PostRegister = () => {
                   handleSingleSelectChange(selected, "curriculumId")
                 }
                 options={[
-                  { value: "풀스택 과정", label: "풀스택 과정" },
-                  { value: "쿠버네티스 과정", label: "쿠버네티스 과정" },
-                  { value: "AI자연어처리 과정", label: "AI자연어처리 과정" },
+                  { value: "1", label: "풀스택 과정" },
+                  { value: "2", label: "쿠버네티스 과정" },
+                  { value: "3", label: "AI자연어처리 과정" },
                   {
-                    value: "정보 보안 전문가 양성 과정",
+                    value: "4",
                     label: "정보 보안 전문가 양성 과정",
                   },
                 ]}
@@ -217,9 +222,9 @@ const PostRegister = () => {
           <div className="flex mt-5 gap-5 px-5 w-full">
             <div className="flex-1">
               <span>What We Do</span>
-              <div className="py-3 flex gap-3">
+              <div className="py-3 flex flex-wrap  gap-3">
                 {formData.subject.map((item) => (
-                  <Item text={item} />
+                  <Item key={item} text={item} />
                 ))}
               </div>
               <MultiSelect
@@ -242,9 +247,9 @@ const PostRegister = () => {
             </div>
             <div className="flex-1">
               <span>기술 스택</span>
-              <div className="py-3 flex gap-3">
+              <div className="py-3 flex flex-wrap gap-3">
                 {formData.stack.map((item) => (
-                  <Item text={item} />
+                  <Item key={item} text={item} />
                 ))}
               </div>
               <MultiSelect
