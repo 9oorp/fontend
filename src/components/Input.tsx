@@ -5,11 +5,8 @@ const Input: React.FC<{
   selectedValue: string;
   onChange: (value: string) => void;
 }> = ({ placeholder, selectedValue, onChange }) => {
-  const [inputValue, setInputValue] = useState(selectedValue || "");
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    setInputValue(newValue);
     onChange(newValue); // 이 부분은 선택한 값을 상태로 관리하기 위한 것입니다.
   };
 
@@ -18,7 +15,7 @@ const Input: React.FC<{
       <input
         type="text"
         placeholder={placeholder}
-        value={inputValue}
+        value={selectedValue}
         onChange={handleInputChange}
         className="outline-none w-full p-2 pl-3 pr-12 placeholder-gray-900 border-2 focus:border-my-blue hover:border-my-blue transition-all duration-300 ring-0 rounded-xl placeholder:text-gray-400"
       />

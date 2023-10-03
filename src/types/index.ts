@@ -24,6 +24,7 @@ export interface ToggleProps {
   onToggle?: (state: boolean) => void;
 }
 export interface postDetail {
+  accountId: string;
   classification: string;
   contactUrl: string;
   content: string;
@@ -31,9 +32,9 @@ export interface postDetail {
   id: number;
   memberName: string;
   recruitNum: number;
-  stack: string;
+  stack: [];
   status: string;
-  subject: string;
+  subject: [];
   title: string;
   createdAt: string;
   updatedAt: string;

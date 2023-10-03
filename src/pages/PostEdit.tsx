@@ -1,125 +1,173 @@
-import { useState } from "react";
-import SingleSelect from "../components/singleSelect";
-import MultiSelect from "../components/multiSelect";
-import Input from "../components/Input";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import store from "../store";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
-import { EditorState, ContentState, convertToRaw } from "draft-js";
+import {
+  EditorState,
+  ContentState,
+  convertToRaw,
+  convertFromHTML,
+} from "draft-js";
 import { Editor as DraftEditor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
 import arrToString from "../libs/arrToString";
+import Input from "../components/Input";
+import SingleSelect from "../components/singleSelect";
+import MultiSelect from "../components/multiSelect";
 import Item from "../components/item";
-import { useNavigate } from "react-router";
+import store from "../store";
+
+const classificationIdMap: { [key: string]: number } = {
+  프로젝트: 0,
+  스터디: 1,
+};
 const curriculumIdMap: { [key: string]: number } = {
   "풀스택 과정": 2,
   "정보 보안 전문가 양성 과정": 3,
   "쿠버네티스 과정": 4,
   "AI자연어처리 과정": 5,
 };
-const classificationIdMap: { [key: string]: number } = {
-  스터디: 0,
-  프로젝트: 1,
-};
-const PostRegister = () => {
+const PostEdit = () => {
+  const postId = useParams().id; // 포스트 ID를 React Router로부터 받아옵니다.
+  const navigate = useNavigate();
+  const userId = store.getState().userData.accountId;
+
   const [formData, setFormData] = useState({
     classification: "", // Single-select
     subject: [], // Multi-select
     stack: [], // Multi-select
     recruitNum: "", // Input
-    curriculumId: "", // Single-select
+    curriculumName: "", // Single-select
     contactUrl: "", // Input
     title: "", // Input
     content: "",
   });
-  const userId = store.getState().userData.accountId;
+
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const navigate = useNavigate();
-  const handleInputChange = (value: any, name: any) => {
+
+  const handleInputChange = (value: string, name: string) => {
     setFormData({
       ...formData,
       [name]: value,
     });
   };
-  const handleRichInputChange = (editorState: EditorState) => {
-    setEditorState(editorState);
-  };
 
-  const handleSingleSelectChange = (selectedValue: any, name: any) => {
+  const handleSingleSelectChange = (selectedValue: string, name: string) => {
     setFormData({
       ...formData,
       [name]: selectedValue,
     });
   };
 
-  const handleMultiSelectChange = (selectedValues: any, name: any) => {
+  const handleMultiSelectChange = (selectedValues: string[], name: string) => {
     setFormData({
       ...formData,
       [name]: selectedValues,
     });
   };
-  const refreshAccessToken = async (refreshToken: any) => {
-    const headers = {
-      Authorization: `Bearer ${refreshToken}`,
-    };
-    try {
-      const response = await axios.post("/api/auth/refresh-token", null, {
-        headers,
-      });
-      // 새로운 access token을 얻었을 때의 처리
-      if (response.data.ok) {
-        // 서버 응답 확인
-        const newAccessToken = response.data.data.accessToken;
-        localStorage.setItem("accessToken", newAccessToken);
-
-        // 여기에서 accessToken 경로를 확인하고 값을 얻어올 수 있도록 코드를 수정
-      } else {
-        console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
-      }
-    } catch (error) {
-      console.error("토큰 갱신 실패", error);
-    }
-  };
+  const curriculumOptions = [
+    // 커리큘럼 선택 항목 배열
+    { value: "1", label: "풀스택 과정" },
+    { value: "2", label: "쿠버네티스 과정" },
+    { value: "3", label: "AI자연어처리 과정" },
+    { value: "4", label: "정보 보안 전문가 양성 과정" },
+  ];
   const convertContentToHTML = () => {
     const contentState = editorState.getCurrentContent();
     const contentRaw = convertToRaw(contentState);
-    const contentHtml: string = draftToHtml(contentRaw as any); // Type assertion
+    const contentHtml = draftToHtml(contentRaw); // Type assertion
     return contentHtml;
   };
+  useEffect(() => {
+    // postId를 사용하여 포스트의 현재 내용을 불러옵니다.
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(`/api/posts/${postId}`);
+        const postData = response.data.data.post; // 포스트의 현재 내용을 가져옵니다.
+        console.log(postData);
+        // 포스트 데이터를 폼 데이터에 설정합니다.
+        setFormData({
+          classification: postData.classification ? "프로젝트" : "스터디",
+          subject: postData.subject, // 데이터가 쉼표로 구분된 문자열이라면 적절히 파싱합니다.
+          stack: postData.stack, // 데이터가 쉼표로 구분된 문자열이라면 적절히 파싱합니다.
+          recruitNum: postData.recruitNum,
+          curriculumName: postData.curriculumName,
+          contactUrl: postData.contactUrl,
+          title: postData.title,
+          content: postData.content,
+        });
+
+        if (postData.content) {
+          const blocksFromHTML = convertFromHTML(postData.content);
+          const contentState = ContentState.createFromBlockArray(
+            blocksFromHTML.contentBlocks,
+            blocksFromHTML.entityMap
+          );
+          const editorState = EditorState.createWithContent(contentState);
+          setEditorState(editorState);
+        }
+      } catch (error) {
+        console.error("포스트 데이터를 불러오는 중 에러 발생", error);
+      }
+    };
+
+    fetchPostData();
+  }, [postId]);
+  console.log(formData.contactUrl);
 
   const handleSubmit = async () => {
-    console.log(userId);
     const accessToken = localStorage.getItem("accessToken");
     const htmlContent = convertContentToHTML();
     const headers = {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     };
-    const curriculumId = curriculumIdMap[formData.curriculumId];
     const classificationId = classificationIdMap[formData.classification];
-    console.log(curriculumId);
+    const curriculumId = curriculumIdMap[formData.curriculumName];
+    const refreshAccessToken = async (refreshToken: any) => {
+      const headers = {
+        Authorization: `Bearer ${refreshToken}`,
+      };
+      try {
+        const response = await axios.post("/api/auth/refresh-token", null, {
+          headers,
+        });
+        // 새로운 access token을 얻었을 때의 처리
+        if (response.data.ok) {
+          // 서버 응답 확인
+          const newAccessToken = response.data.data.accessToken;
+          localStorage.setItem("accessToken", newAccessToken);
+
+          // 여기에서 accessToken 경로를 확인하고 값을 얻어올 수 있도록 코드를 수정
+        } else {
+          console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
+        }
+      } catch (error) {
+        console.error("토큰 갱신 실패", error);
+      }
+    };
     // 요청 본문 데이터
     const requestData = {
-      classification: classificationId.toString(),
-      subject: arrToString(formData.subject), //
-      stack: arrToString(formData.stack), //
+      classification: classificationId,
+      subject: arrToString(formData.subject),
+      stack: arrToString(formData.stack),
       recruitNum: +formData.recruitNum,
       curriculumId: curriculumId,
       contactUrl: formData.contactUrl,
       title: formData.title,
-      status: (0).toString(),
       content: htmlContent,
       accountId: userId,
+      status: "0",
     };
     console.log(requestData);
-    // eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiIyIiwibWVtYmVyTmFtZSI6IjEwIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTY5NTAxNTQ5NywiZXhwIjoxNjk1MDE5MDk3fQ.0NfUah2lMjl5u85AVrLytnd8v7wlyM8VYnxrrX5mALg
 
-    // Axios를 사용하여 POST 요청 보내기
     try {
-      const response = await axios.post("/api/posts", requestData, { headers });
-
+      const response = await axios.put(`/api/posts/${postId}`, requestData, {
+        headers,
+      });
+      console.log(response);
       if (response.data.errorMessage === "토큰 만료") {
         const refreshToken = localStorage.getItem("refreshToken");
         if (refreshToken) {
@@ -140,41 +188,39 @@ const PostRegister = () => {
           );
         }
       } else {
-        console.log(response);
-        if (response.data.ok) {
-          const postId = response.data.data.post.id;
-          navigate(`/post/${postId}`);
-        }
+        // 포스트 수정 성공 시 리다이렉션합니다.
+        navigate(`/post/${postId}`);
       }
     } catch (error) {
-      console.error("POST 요청 실패", error);
+      console.error("포스트 수정 요청 실패", error);
     }
   };
+  console.log(formData);
   return (
     <div className="h-full flex justify-center">
-      <div className="flex w-full  max-w-7xl ">
+      <div className="flex w-full max-w-7xl">
         <div className="flex flex-col space-y-5 w-full">
+          {/* 폼 컨트롤들을 여기에 추가 */}
           <div className="flex mt-5 gap-5 px-5 w-full">
             <div className="flex-1">
               <span>모집 구분</span>
               <SingleSelect
-                name="classification" // Make sure the name prop is "classification"
+                name="classification"
                 selectedValue={formData.classification}
                 onChange={(selected) =>
                   handleSingleSelectChange(selected, "classification")
                 }
                 options={[
-                  { value: "0", label: "스터디" },
-                  { value: "1", label: "프로젝트" },
+                  { value: "스터디", label: "스터디" },
+                  { value: "프로젝트", label: "프로젝트" },
                 ]}
                 placeholder="스터디/프로젝트"
               />
             </div>
             <div className="flex-1">
               <span>스터디 인원</span>
-
               <SingleSelect
-                name="recruitNum" // Make sure the name prop is "recruitmentType"
+                name="recruitNum"
                 selectedValue={formData.recruitNum}
                 onChange={(selected) =>
                   handleSingleSelectChange(selected, "recruitNum")
@@ -194,22 +240,13 @@ const PostRegister = () => {
           <div className="flex mt-5 gap-5 px-5 w-full">
             <div className="flex-1">
               <span>커리큘럼</span>
-
               <SingleSelect
-                name="curriculumId" // Make sure the name prop is "recruitmentType"
-                selectedValue={formData.curriculumId}
+                name="curriculumName"
+                selectedValue={formData.curriculumName}
                 onChange={(selected) =>
-                  handleSingleSelectChange(selected, "curriculumId")
+                  handleSingleSelectChange(selected, "curriculumName")
                 }
-                options={[
-                  { value: "1", label: "풀스택 과정" },
-                  { value: "2", label: "쿠버네티스 과정" },
-                  { value: "3", label: "AI자연어처리 과정" },
-                  {
-                    value: "4",
-                    label: "정보 보안 전문가 양성 과정",
-                  },
-                ]}
+                options={curriculumOptions} // 커리큘럼 선택 항목을 사용합니다.
                 placeholder="수강중인 과정"
               />
             </div>
@@ -217,7 +254,7 @@ const PostRegister = () => {
               <span>연락 방법</span>
               <Input
                 placeholder="오픈 채팅방 혹은 email"
-                selectedValue={formData.contactUrl}
+                selectedValue={formData.contactUrl} // formData.contactUrl을 전달
                 onChange={(selected) =>
                   handleInputChange(selected, "contactUrl")
                 }
@@ -227,13 +264,13 @@ const PostRegister = () => {
           <div className="flex mt-5 gap-5 px-5 w-full">
             <div className="flex-1">
               <span>What We Do</span>
-              <div className="py-3 flex flex-wrap  gap-3">
+              <div className="py-3 flex flex-wrap gap-3">
                 {formData.subject.map((item) => (
                   <Item key={item} text={item} />
                 ))}
               </div>
               <MultiSelect
-                name="subject" // Make sure the name prop is "recruitmentType"
+                name="subject"
                 selectedValues={formData.subject}
                 onChange={(selected) =>
                   handleMultiSelectChange(selected, "subject")
@@ -258,7 +295,7 @@ const PostRegister = () => {
                 ))}
               </div>
               <MultiSelect
-                name="stack" // Make sure the name prop is "recruitmentType"
+                name="stack"
                 selectedValues={formData.stack}
                 onChange={(selected) =>
                   handleMultiSelectChange(selected, "stack")
@@ -279,21 +316,17 @@ const PostRegister = () => {
               />
             </div>
           </div>
+
           <div className="flex px-5 py-5 w-full">
             <div className="w-full flex flex-col gap-5">
-              <span>프로젝트 제목 및 설명을 작성해주세요~</span>
+              <span>프로젝트 제목 및 설명을 수정하세요~</span>
               <Input
                 placeholder="프로젝트 제목"
                 selectedValue={formData.title}
                 onChange={(selected) => handleInputChange(selected, "title")}
               />
-              {/* <Input
-                placeholder="프로젝트 설명"
-                selectedValue={formData.content}
-                onChange={(selected) => handleInputChange(selected, "content")}
-              /> */}
 
-              <div className="border bg-white p-3 rounded-md h-full min-h-[400px]  ">
+              <div className="border bg-white p-3 rounded-md h-full min-h-[400px]">
                 <DraftEditor
                   editorState={editorState}
                   wrapperStyle={{
@@ -305,7 +338,7 @@ const PostRegister = () => {
                     cursor: "text",
                     paddingLeft: "10px",
                   }}
-                  onEditorStateChange={handleRichInputChange}
+                  onEditorStateChange={setEditorState}
                 />
               </div>
             </div>
@@ -315,7 +348,7 @@ const PostRegister = () => {
               className="w-fit bg-my-blue rounded-md text-my-color p-2"
               onClick={() => handleSubmit()}
             >
-              작성하기
+              수정하기
             </button>
           </div>
         </div>
@@ -323,4 +356,5 @@ const PostRegister = () => {
     </div>
   );
 };
-export default PostRegister;
+
+export default PostEdit;
