@@ -2,9 +2,13 @@
 
 import { combineReducers } from "redux";
 import user from "./user";
+import curriculum from "./curriculum";
 
 // 루트 리듀서
-const rootReducer = combineReducers({ user });
+const rootReducer = combineReducers({
+  user,
+  curriculum, // curriculum 슬라이스 추가
+});
 
 export default rootReducer;
 

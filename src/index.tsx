@@ -21,7 +21,7 @@ if (localStorage.accessToken && localStorage.accessToken !== "undefined ") {
     })
   );
 }
-console.log(store.getState().userData);
+console.log(store.getState().user.userData);
 root.render(
   <React.StrictMode>
     <Provider store={store}>

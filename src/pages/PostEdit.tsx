@@ -19,21 +19,36 @@ import MultiSelect from "../components/multiSelect";
 import Item from "../components/item";
 import store from "../store";
 
-const classificationIdMap: { [key: string]: number } = {
-  프로젝트: 0,
-  스터디: 1,
-};
 const curriculumIdMap: { [key: string]: number } = {
   "풀스택 과정": 2,
   "정보 보안 전문가 양성 과정": 3,
   "쿠버네티스 과정": 4,
   "AI자연어처리 과정": 5,
 };
+const classificationIdMap: { [key: string]: number } = {
+  프로젝트: 0,
+  스터디: 1,
+};
 const PostEdit = () => {
   const postId = useParams().id; // 포스트 ID를 React Router로부터 받아옵니다.
   const navigate = useNavigate();
-  const userId = store.getState().userData.accountId;
+  const userId = store.getState().user.userData.accountId;
+  // axios.interceptors.request.use((request) => {
+  //   console.log("HTTP Request:", request);
+  //   return request;
+  // });
 
+  // // Axios response interceptor to log responses
+  // axios.interceptors.response.use(
+  //   (response) => {
+  //     console.log("HTTP Response:", response);
+  //     return response;
+  //   },
+  //   (error) => {
+  //     console.error("HTTP Error Response:", error);
+  //     throw error;
+  //   }
+  // );
   const [formData, setFormData] = useState({
     classification: "", // Single-select
     subject: [], // Multi-select
@@ -45,6 +60,7 @@ const PostEdit = () => {
     content: "",
   });
 
+  console.log(formData.curriculumName);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const handleInputChange = (value: string, name: string) => {
@@ -69,10 +85,10 @@ const PostEdit = () => {
   };
   const curriculumOptions = [
     // 커리큘럼 선택 항목 배열
-    { value: "1", label: "풀스택 과정" },
-    { value: "2", label: "쿠버네티스 과정" },
-    { value: "3", label: "AI자연어처리 과정" },
-    { value: "4", label: "정보 보안 전문가 양성 과정" },
+    { value: "2", label: "풀스택 과정" },
+    { value: "3", label: "쿠버네티스 과정" },
+    { value: "4", label: "AI자연어처리 과정" },
+    { value: "5", label: "정보 보안 전문가 양성 과정" },
   ];
   const convertContentToHTML = () => {
     const contentState = editorState.getCurrentContent();
@@ -86,7 +102,6 @@ const PostEdit = () => {
       try {
         const response = await axios.get(`/api/posts/${postId}`);
         const postData = response.data.data.post; // 포스트의 현재 내용을 가져옵니다.
-        console.log(postData);
         // 포스트 데이터를 폼 데이터에 설정합니다.
         setFormData({
           classification: postData.classification ? "프로젝트" : "스터디",
@@ -115,7 +130,6 @@ const PostEdit = () => {
 
     fetchPostData();
   }, [postId]);
-  console.log(formData.contactUrl);
 
   const handleSubmit = async () => {
     const accessToken = localStorage.getItem("accessToken");
@@ -126,6 +140,7 @@ const PostEdit = () => {
     };
     const classificationId = classificationIdMap[formData.classification];
     const curriculumId = curriculumIdMap[formData.curriculumName];
+    console.log(curriculumId);
     const refreshAccessToken = async (refreshToken: any) => {
       const headers = {
         Authorization: `Bearer ${refreshToken}`,
@@ -195,7 +210,6 @@ const PostEdit = () => {
       console.error("포스트 수정 요청 실패", error);
     }
   };
-  console.log(formData);
   return (
     <div className="h-full flex justify-center">
       <div className="flex w-full max-w-7xl">

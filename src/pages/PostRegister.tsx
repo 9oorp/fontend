@@ -34,7 +34,7 @@ const PostRegister = () => {
     title: "", // Input
     content: "",
   });
-  const userId = store.getState().userData.accountId;
+  const userId = store.getState().user.userData.accountId;
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const navigate = useNavigate();
   const handleInputChange = (value: any, name: any) => {

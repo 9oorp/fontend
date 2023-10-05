@@ -20,8 +20,8 @@ export interface SingleSelectProps {
 }
 
 export interface ToggleProps {
-  initial?: boolean;
-  onToggle?: (state: boolean) => void;
+  initial?: number;
+  onToggle?: (state: number) => void;
 }
 export interface postDetail {
   accountId: string;

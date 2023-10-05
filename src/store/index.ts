@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import reducer from "./modules/user"; // Adjust this import path to your rootReducer location
-
+import userReducer from "./modules/user"; // Import userReducer here
+import curriculumReducer from "./modules/curriculum"; // Import curriculumReducer here
 const store = configureStore({
-  reducer: reducer,
+  reducer: {
+    user: userReducer,
+    curriculum: curriculumReducer,
+  },
 });
 
 export default store;

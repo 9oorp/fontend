@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { ToggleProps } from "../types";
 
-const Toggle: React.FC<ToggleProps> = ({ initial = false, onToggle }) => {
-  const [isToggled, setIsToggled] = useState(initial);
+const Toggle: React.FC<ToggleProps> = ({ initial = 0, onToggle }) => {
+  const [isToggled, setIsToggled] = useState<number>(initial);
 
   const handleToggle = () => {
-    const newState = !isToggled;
+    const newState = isToggled === 0 ? 1 : 0;
     setIsToggled(newState);
     if (onToggle) {
       onToggle(newState);
@@ -18,12 +18,12 @@ const Toggle: React.FC<ToggleProps> = ({ initial = false, onToggle }) => {
       style={{
         padding: "5px 15px",
         borderRadius: "4px",
-        backgroundColor: isToggled ? "#4caf50" : "#f44336",
+        backgroundColor: isToggled ? "#f44336" : "#4caf50",
         color: "white",
         cursor: "pointer",
       }}
     >
-      {isToggled ? "ON" : "OFF"}
+      {isToggled ? "OFF" : "ON"}
     </button>
   );
 };
