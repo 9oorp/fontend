@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Card from "../components/card";
-import MultiSelect from "../components/multiSelect";
 import SearchBar from "../components/searchBar";
 import Toggle from "../components/toggle";
 import Item from "../components/item";
@@ -9,7 +8,6 @@ import axios from "axios";
 import { postDetail } from "../types";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
-import store from "../store";
 
 const Main = () => {
   const [classNum, setClassNum] = useState(0);
@@ -59,18 +57,11 @@ const Main = () => {
   // };
 
   useEffect(() => {
-    console.log(
-      curriculumId,
-      classNum,
-      page,
-      subject,
-      stack,
-      status,
-      searchValue
-    );
     const fetchData = async () => {
       try {
-        const apiUrl = `/api/curriculum/${curriculumId}/posts?page=${page}&classification=${classNum}&sort=createdAt&status=${status}&search=${searchValue}`;
+        const apiUrl =
+          process.env.REACT_APP_DB_HOST +
+          `/api/curriculum/${curriculumId}/posts?page=${page}&classification=${classNum}&sort=createdAt&status=${status}&search=${searchValue}`;
 
         const response = await axios.get(apiUrl);
 
@@ -81,9 +72,8 @@ const Main = () => {
         const data = response.data;
 
         setPost(data.data.posts);
-        console.log(post);
       } catch (error) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
       }
     };
 
@@ -104,9 +94,41 @@ const Main = () => {
       handlePageChange(page - 1);
     }
   };
+  const [gridClass, setGridClass] = useState("grid-cols-4"); // 기본 클래스는 4열 그리드
+
+  useEffect(() => {
+    const handleResize = () => {
+      let newGridClass = "grid-cols-4"; // 기본 클래스 설정
+      switch (true) {
+        case window.innerWidth < 1150:
+          newGridClass = "grid-cols-3";
+          break;
+        case window.innerWidth < 840:
+          newGridClass = "grid-cols-2";
+          break;
+        case window.innerWidth < 400:
+          newGridClass = "grid-cols-1";
+          break;
+        default:
+          newGridClass = "grid-cols-4";
+          break;
+      }
+
+      setGridClass(newGridClass);
+    };
+
+    // 창 크기가 변경될 때마다 handleResize 함수를 호출합니다.
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트가 언마운트될 때 리스너를 제거합니다.
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [window.innerWidth]);
   if (!curriculumId) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className="h-full flex justify-center">
       <div className="flex flex-col w-full  max-w-7xl gap-5 pt-3 p-5">
@@ -145,7 +167,9 @@ const Main = () => {
             <Item text={item} />
           ))}
         </div>
-        <div className="grid grid-cols-4 gap-20">
+        <div
+          className={`grid gap-20 ${gridClass} justify-items-center items-center`}
+        >
           {post?.map((item, index) => (
             <Card
               key={index}
@@ -156,7 +180,7 @@ const Main = () => {
             />
           ))}
         </div>
-        <div className="pagination-controls">
+        <div>
           <button onClick={handlePrevPage} disabled={page === -1}>
             Previous
           </button>

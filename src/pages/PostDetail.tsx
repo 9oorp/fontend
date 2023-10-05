@@ -29,7 +29,7 @@ const PostDetail = () => {
   const user = store.getState().user.userData;
 
   const [selected, setSelected] = useState<string>(post ? post.status : "");
-  console.log(post?.status);
+
   const options = [
     { value: "모집중", label: "모집중" },
     { value: "모집종료", label: "모집종료" },
@@ -42,7 +42,7 @@ const PostDetail = () => {
 
       // Make sure you have the access token
       if (!accessToken) {
-        console.error("Access token not found.");
+        // console.error("Access token not found.");
         return;
       }
       const refreshAccessToken = async (refreshToken: any) => {
@@ -50,9 +50,13 @@ const PostDetail = () => {
           Authorization: `Bearer ${refreshToken}`,
         };
         try {
-          const response = await axios.post("/api/auth/refresh-token", null, {
-            headers,
-          });
+          const response = await axios.post(
+            process.env.REACT_APP_DB_HOST + "/api/auth/refresh-token",
+            null,
+            {
+              headers,
+            }
+          );
           // 새로운 access token을 얻었을 때의 처리
           if (response.data.ok) {
             // 서버 응답 확인
@@ -61,10 +65,10 @@ const PostDetail = () => {
 
             // 여기에서 accessToken 경로를 확인하고 값을 얻어올 수 있도록 코드를 수정
           } else {
-            console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
+            // console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
           }
         } catch (error) {
-          console.error("토큰 갱신 실패", error);
+          // console.error("토큰 갱신 실패", error);
         }
       };
       const curriculumId = curriculumIdMap[post?.curriculumName || ""];
@@ -86,9 +90,13 @@ const PostDetail = () => {
       };
 
       // Send the PUT request with the headers
-      const response = await axios.put(`/api/posts/${id}`, requestData, {
-        headers,
-      });
+      const response = await axios.put(
+        process.env.REACT_APP_DB_HOST + `/api/posts/${id}`,
+        requestData,
+        {
+          headers,
+        }
+      );
       if (response.data.errorMessage === "토큰 만료") {
         const refreshToken = localStorage.getItem("refreshToken");
         if (refreshToken) {
@@ -99,24 +107,29 @@ const PostDetail = () => {
             "Content-Type": "application/json",
           };
 
-          const newResponse = await axios.post("/api/posts", requestData, {
-            headers: newHeaders,
-          });
-          console.log(newResponse);
-        } else {
-          console.error(
-            "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."
+          const newResponse = await axios.post(
+            process.env.REACT_APP_DB_HOST + "/api/posts",
+            requestData,
+            {
+              headers: newHeaders,
+            }
           );
+        } else {
+          // console.error(
+          //   "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."
+          // );
         }
       }
     } catch (error) {
       // Handle the error
-      console.error("Error updating post status:", error);
+      // console.error("Error updating post status:", error);
     }
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get(`/api/posts/${id}`);
+      const response = await axios.get(
+        process.env.REACT_APP_DB_HOST + `/api/posts/${id}`
+      );
 
       setPost(response.data.data.post);
       setLoading(false);
@@ -124,14 +137,13 @@ const PostDetail = () => {
       const axiosError = err as AxiosError<ErrorResponse>;
 
       if (axiosError && axiosError.response) {
-        console.error("Error fetching data:", axiosError.response.data);
+        // console.error("Error fetching data:", axiosError.response.data);
         setError(axiosError.response.data.message || "Error fetching data");
       } else {
         setError("An unexpected error occurred.");
       }
     }
   };
-  console.log(post?.status);
   useEffect(() => {
     fetchData();
     post?.status === "모집중" ? setSelected("모집중") : setSelected("모집종료");

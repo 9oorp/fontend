@@ -5,8 +5,6 @@ import { ReactComponent as Hamburger } from "../assets/burger-menu.svg";
 import { Link, useNavigate } from "react-router-dom";
 import AuthModal from "./auth/authModal";
 import SideMenu from "./auth/sideMenu";
-import { useDispatch } from "react-redux";
-import { setCurriculumId } from "../store/modules/curriculum"; // curriculum 슬라이스의 액션 임포트
 
 const Header = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,11 +18,9 @@ const Header = () => {
       setModalOpen(false);
     }
   };
-  const dispatch = useDispatch();
-
-  const handleCurriculumChange = (newCurriculumId: any) => {
-    // curriculumId를 업데이트하고 Redux 스토어에 저장
-    dispatch(setCurriculumId(newCurriculumId));
+  const handleClick = () => {
+    window.location.reload();
+    navigate("/");
   };
   return (
     <>
@@ -37,7 +33,7 @@ const Header = () => {
           >
             <Hamburger />
           </div>
-          <Link to={"/"}>
+          <Link to={"/"} onClick={() => handleClick}>
             <img src={logo} alt="logo" />
           </Link>
 

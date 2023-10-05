@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SingleSelect from "../components/singleSelect";
 import MultiSelect from "../components/multiSelect";
 import Input from "../components/Input";
 import axios from "axios";
 import store from "../store";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/modules";
 import { EditorState, ContentState, convertToRaw } from "draft-js";
 import { Editor as DraftEditor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -34,9 +32,15 @@ const PostRegister = () => {
     title: "", // Input
     content: "",
   });
-  const userId = store.getState().user.userData.accountId;
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const userId = store.getState().user.userData?.accountId;
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!userId) {
+      navigate("/");
+    }
+  }, [userId]);
+
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const handleInputChange = (value: any, name: any) => {
     setFormData({
       ...formData,
@@ -65,9 +69,13 @@ const PostRegister = () => {
       Authorization: `Bearer ${refreshToken}`,
     };
     try {
-      const response = await axios.post("/api/auth/refresh-token", null, {
-        headers,
-      });
+      const response = await axios.post(
+        process.env.REACT_APP_DB_HOST + "/api/auth/refresh-token",
+        null,
+        {
+          headers,
+        }
+      );
       // 새로운 access token을 얻었을 때의 처리
       if (response.data.ok) {
         // 서버 응답 확인
@@ -76,10 +84,10 @@ const PostRegister = () => {
 
         // 여기에서 accessToken 경로를 확인하고 값을 얻어올 수 있도록 코드를 수정
       } else {
-        console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
+        // console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
       }
     } catch (error) {
-      console.error("토큰 갱신 실패", error);
+      // console.error("토큰 갱신 실패", error);
     }
   };
   const convertContentToHTML = () => {
@@ -90,7 +98,6 @@ const PostRegister = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(userId);
     const accessToken = localStorage.getItem("accessToken");
     const htmlContent = convertContentToHTML();
     const headers = {
@@ -99,7 +106,6 @@ const PostRegister = () => {
     };
     const curriculumId = curriculumIdMap[formData.curriculumId];
     const classificationId = classificationIdMap[formData.classification];
-    console.log(curriculumId);
     // 요청 본문 데이터
     const requestData = {
       classification: classificationId.toString(),
@@ -113,12 +119,14 @@ const PostRegister = () => {
       content: htmlContent,
       accountId: userId,
     };
-    console.log(requestData);
-    // eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiIyIiwibWVtYmVyTmFtZSI6IjEwIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTY5NTAxNTQ5NywiZXhwIjoxNjk1MDE5MDk3fQ.0NfUah2lMjl5u85AVrLytnd8v7wlyM8VYnxrrX5mALg
 
     // Axios를 사용하여 POST 요청 보내기
     try {
-      const response = await axios.post("/api/posts", requestData, { headers });
+      const response = await axios.post(
+        process.env.REACT_APP_DB_HOST + "/api/posts",
+        requestData,
+        { headers }
+      );
 
       if (response.data.errorMessage === "토큰 만료") {
         const refreshToken = localStorage.getItem("refreshToken");
@@ -130,24 +138,26 @@ const PostRegister = () => {
             "Content-Type": "application/json",
           };
 
-          const newResponse = await axios.post("/api/posts", requestData, {
-            headers: newHeaders,
-          });
-          console.log(newResponse);
-        } else {
-          console.error(
-            "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."
+          const newResponse = await axios.post(
+            process.env.REACT_APP_DB_HOST + "/api/posts",
+            requestData,
+            {
+              headers: newHeaders,
+            }
           );
+        } else {
+          // console.error(
+          //   "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."
+          // );
         }
       } else {
-        console.log(response);
         if (response.data.ok) {
           const postId = response.data.data.post.id;
           navigate(`/post/${postId}`);
         }
       }
     } catch (error) {
-      console.error("POST 요청 실패", error);
+      // console.error("POST 요청 실패", error);
     }
   };
   return (
@@ -264,16 +274,15 @@ const PostRegister = () => {
                   handleMultiSelectChange(selected, "stack")
                 }
                 options={[
-                  { value: "Java", label: "Java" },
-                  { value: "Javascript", label: "Javascript" },
-                  { value: "Typescript", label: "Typescript" },
-                  { value: "React", label: "React" },
-                  { value: "Redux", label: "Redux" },
-                  { value: "Spring", label: "Spring" },
-                  { value: "AWS", label: "AWS" },
-                  { value: "쿠버네티스", label: "쿠버네티스" },
-                  { value: "Kubernetes", label: "Kubernetes" },
-                  { value: "Tensorflow", label: "Tensorflow" },
+                  { value: "java", label: "java" },
+                  { value: "javascript", label: "javascript" },
+                  { value: "typescript", label: "typescript" },
+                  { value: "react", label: "react" },
+                  { value: "redux", label: "redux" },
+                  { value: "spring", label: "spring" },
+                  { value: "aWS", label: "aws" },
+                  { value: "kubernetes", label: "kubernetes" },
+                  { value: "tensorflow", label: "tensorflow" },
                 ]}
                 placeholder="기술 스택"
               />

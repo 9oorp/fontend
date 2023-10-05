@@ -27,13 +27,15 @@ const AuthModal = ({ setModalOpen }: any) => {
     e.preventDefault();
     if (toggle) {
       try {
-        const response = await axios.post("/api/members/login", {
-          accountId: values.accountId,
-          password: values.password,
-        });
+        const response = await axios.post(
+          process.env.REACT_APP_DB_HOST + "/api/members/login",
+          {
+            accountId: values.accountId,
+            password: values.password,
+          }
+        );
 
         if (response.data.ok) {
-          console.log(response.data.data);
           const accessToken = response.data.data.accessToken;
           const refreshToken = response.data.data.refreshToken;
           localStorage.setItem("accessToken", accessToken);
@@ -60,12 +62,15 @@ const AuthModal = ({ setModalOpen }: any) => {
     } else {
       // 회원가입
       try {
-        const response = await axios.post("/api/members/join", {
-          accountId: values.accountId,
-          password: values.password,
-          passwordConfirm: values.passwordCheck,
-          memberName: values.name,
-        });
+        const response = await axios.post(
+          process.env.REACT_APP_DB_HOST + "/api/members/join",
+          {
+            accountId: values.accountId,
+            password: values.password,
+            passwordConfirm: values.passwordCheck,
+            memberName: values.name,
+          }
+        );
         if (response.data.ok) {
           setToggle(true);
           setError("");

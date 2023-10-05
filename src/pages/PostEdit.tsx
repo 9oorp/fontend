@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/modules";
+
 import {
   EditorState,
   ContentState,
@@ -60,7 +59,6 @@ const PostEdit = () => {
     content: "",
   });
 
-  console.log(formData.curriculumName);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const handleInputChange = (value: string, name: string) => {
@@ -100,7 +98,9 @@ const PostEdit = () => {
     // postId를 사용하여 포스트의 현재 내용을 불러옵니다.
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`/api/posts/${postId}`);
+        const response = await axios.get(
+          process.env.REACT_APP_DB_HOST + `/api/posts/${postId}`
+        );
         const postData = response.data.data.post; // 포스트의 현재 내용을 가져옵니다.
         // 포스트 데이터를 폼 데이터에 설정합니다.
         setFormData({
@@ -124,7 +124,7 @@ const PostEdit = () => {
           setEditorState(editorState);
         }
       } catch (error) {
-        console.error("포스트 데이터를 불러오는 중 에러 발생", error);
+        // console.error("포스트 데이터를 불러오는 중 에러 발생", error);
       }
     };
 
@@ -140,15 +140,18 @@ const PostEdit = () => {
     };
     const classificationId = classificationIdMap[formData.classification];
     const curriculumId = curriculumIdMap[formData.curriculumName];
-    console.log(curriculumId);
     const refreshAccessToken = async (refreshToken: any) => {
       const headers = {
         Authorization: `Bearer ${refreshToken}`,
       };
       try {
-        const response = await axios.post("/api/auth/refresh-token", null, {
-          headers,
-        });
+        const response = await axios.post(
+          process.env.REACT_APP_DB_HOST + "/api/auth/refresh-token",
+          null,
+          {
+            headers,
+          }
+        );
         // 새로운 access token을 얻었을 때의 처리
         if (response.data.ok) {
           // 서버 응답 확인
@@ -157,10 +160,10 @@ const PostEdit = () => {
 
           // 여기에서 accessToken 경로를 확인하고 값을 얻어올 수 있도록 코드를 수정
         } else {
-          console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
+          // console.error("토큰 갱신 실패: 응답 상태 코드", response.status);
         }
       } catch (error) {
-        console.error("토큰 갱신 실패", error);
+        // console.error("토큰 갱신 실패", error);
       }
     };
     // 요청 본문 데이터
@@ -176,13 +179,15 @@ const PostEdit = () => {
       accountId: userId,
       status: "0",
     };
-    console.log(requestData);
 
     try {
-      const response = await axios.put(`/api/posts/${postId}`, requestData, {
-        headers,
-      });
-      console.log(response);
+      const response = await axios.put(
+        process.env.REACT_APP_DB_HOST + `/api/posts/${postId}`,
+        requestData,
+        {
+          headers,
+        }
+      );
       if (response.data.errorMessage === "토큰 만료") {
         const refreshToken = localStorage.getItem("refreshToken");
         if (refreshToken) {
@@ -193,21 +198,24 @@ const PostEdit = () => {
             "Content-Type": "application/json",
           };
 
-          const newResponse = await axios.post("/api/posts", requestData, {
-            headers: newHeaders,
-          });
-          console.log(newResponse);
-        } else {
-          console.error(
-            "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."
+          const newResponse = await axios.post(
+            process.env.REACT_APP_DB_HOST + "/api/posts",
+            requestData,
+            {
+              headers: newHeaders,
+            }
           );
+        } else {
+          // console.error(
+          //   "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."
+          // );
         }
       } else {
         // 포스트 수정 성공 시 리다이렉션합니다.
         navigate(`/post/${postId}`);
       }
     } catch (error) {
-      console.error("포스트 수정 요청 실패", error);
+      // console.error("포스트 수정 요청 실패", error);
     }
   };
   return (

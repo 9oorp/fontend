@@ -1,4 +1,3 @@
-import React from "react";
 import DynamicImage from "./dynamicImage";
 import Item from "./item";
 import { useNavigate } from "react-router-dom";
