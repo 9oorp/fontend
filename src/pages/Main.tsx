@@ -10,12 +10,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
 import { ReactComponent as RightSVG } from "../assets/chevron_right.svg";
 import { ReactComponent as LeftSVG } from "../assets/chevron_left.svg";
-
+import { cls } from "../libs/utils";
 const Main = () => {
   const [classNum, setClassNum] = useState("0");
   const [selected, setSelected] = useState<string[]>([]);
   const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(15);
+  const [totalPages, setTotalPages] = useState(5);
   const [subject, setSubject] = useState<string[]>([]);
   const [stack, setStack] = useState<string[]>([]);
   const [status, setStatus] = useState(0);
@@ -79,6 +79,7 @@ const Main = () => {
         const data = response.data;
 
         setPost(data.data.posts);
+        setTotalPages(Math.ceil(data.data.totalCount / 20));
       } catch (error) {
         // console.error("Error:", error);
       }
@@ -141,8 +142,18 @@ const Main = () => {
   return (
     <div className="h-full w-full overflow-x-hidden flex justify-center">
       <div className="flex  flex-col w-full  max-w-7xl gap-5 pt-3 p-5">
-        <div className="w-full flex justify-between items-center">
-          <div>
+        <div
+          className={cls(
+            window.innerWidth < 600
+              ? "grid gap-5"
+              : "w-full flex justify-between items-center"
+          )}
+        >
+          <div
+            className={cls(
+              window.innerWidth < 600 ? "flex justify-center items-center" : ""
+            )}
+          >
             <ProjectStudySelector
               selectedOption={classNum}
               onOptionChange={handleOptionChange}
@@ -177,21 +188,27 @@ const Main = () => {
           ))} */}
           {curriculumIdMap[curriculumId]}
         </div>
-        <div
-          className={`grid gap-10 ${gridClass} justify-items-center items-center`}
-        >
-          {post?.map((item, index) => (
-            <Card
-              key={index}
-              id={item.id}
-              title={item.title}
-              stack={item.stack}
-              subject={item.subject}
-              name={item.memberName}
-            />
-          ))}
-        </div>
-        <div className="flex justify-center items-center">
+        {post?.length ? (
+          <div
+            className={`grid gap-14 ${gridClass} justify-items-center items-center`}
+          >
+            {post?.map((item, index) => (
+              <Card
+                key={index}
+                id={item.id}
+                title={item.title}
+                stack={item.stack}
+                subject={item.subject}
+                name={item.memberName}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center">
+            검색 결과가 없어요~
+          </div>
+        )}
+        <div className="flex pt-5 justify-center items-center">
           <button
             onClick={handlePrevPage}
             style={{ cursor: "pointer", marginRight: "10px" }}
@@ -200,12 +217,12 @@ const Main = () => {
             <LeftSVG />
           </button>
           <span>
-            Page {page} of {totalPages}
+            Page {page + 1} of {totalPages}
           </span>
           <button
             onClick={handleNextPage}
             style={{ cursor: "pointer", marginLeft: "10px" }}
-            disabled={page === totalPages}
+            disabled={page === totalPages - 1}
           >
             <RightSVG />
           </button>

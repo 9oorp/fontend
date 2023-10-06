@@ -8,7 +8,7 @@ const SearchBar = ({ searchValue, onSearchInputChange }: any) => {
 
   return (
     <div className="relative flex justify-center items-center ">
-      <div className="absolute left-5 z-10">
+      <div className="relative left-9 z-10">
         <SearchSVG className="w-5 aspect-square fill-gray-300" />
       </div>
 

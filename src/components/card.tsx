@@ -8,8 +8,8 @@ const Card = ({ title, stack, subject, id, name }: any) => {
   const handleCardClick = () => {
     navigate(`/post/${id}`);
   };
-  stack = stack.slice(0, 3);
-  subject = subject.slice(0, 3);
+  stack = stack.slice(0, 5);
+  subject = subject.slice(0, 2);
   return (
     <div
       className=" h-64 w-64 cursor-pointer transition-transform duration-300 hover:scale-110"
@@ -32,14 +32,14 @@ const Card = ({ title, stack, subject, id, name }: any) => {
           ))}
         </div>
         <div className="flex justify-between items-center">
-          <div className="w-1/3 overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {name}
-          </div>
-          <div className="mb-4 flex gap-3 items-center justify-end">
+          <div className="mb-4 flex gap-3 items-center justify-center">
             {stack.map((item: any, index: any) => (
               <DynamicImage key={index} imageName={item} />
             ))}
           </div>
+        </div>
+        <div className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-end">
+          {name}
         </div>
       </div>
     </div>

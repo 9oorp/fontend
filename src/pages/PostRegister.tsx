@@ -280,7 +280,7 @@ const PostRegister = () => {
                   { value: "react", label: "react" },
                   { value: "redux", label: "redux" },
                   { value: "spring", label: "spring" },
-                  { value: "aWS", label: "aws" },
+                  { value: "aws", label: "aws" },
                   { value: "kubernetes", label: "kubernetes" },
                   { value: "tensorflow", label: "tensorflow" },
                 ]}

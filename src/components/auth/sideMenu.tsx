@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { logoutAction } from "../../store/modules/user";
 import { setCurriculumId } from "../../store/modules/curriculum";
+import { useEffect, useRef } from "react";
 
 const SideMenu = ({ setMenuOpen }: any) => {
   const dispatch = useDispatch();
@@ -16,8 +17,29 @@ const SideMenu = ({ setMenuOpen }: any) => {
     window.location.reload();
     setMenuOpen(false);
   };
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    // Function to close the menu when clicking outside of it
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    // Attach the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setMenuOpen]);
+
   return (
-    <div className="bg-white w-52 h-3/4 min-h-fit shadow-md rounded-lg fixed z-50 left-8 top-15 p-4 ">
+    <div
+      className="bg-white w-52 min-h-fit shadow-md rounded-lg fixed z-50 left-8 top-15 p-4 "
+      ref={menuRef}
+    >
       <div>
         <div
           className="cursor-pointer flex justify-end"
