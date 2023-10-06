@@ -104,7 +104,7 @@ const PostEdit = () => {
         const postData = response.data.data.post; // 포스트의 현재 내용을 가져옵니다.
         // 포스트 데이터를 폼 데이터에 설정합니다.
         setFormData({
-          classification: postData.classification ? "프로젝트" : "스터디",
+          classification: postData.classification ? "스터디" : "프로젝트",
           subject: postData.subject, // 데이터가 쉼표로 구분된 문자열이라면 적절히 파싱합니다.
           stack: postData.stack, // 데이터가 쉼표로 구분된 문자열이라면 적절히 파싱합니다.
           recruitNum: postData.recruitNum,
