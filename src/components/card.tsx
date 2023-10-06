@@ -2,7 +2,7 @@ import DynamicImage from "./dynamicImage";
 import Item from "./item";
 import { useNavigate } from "react-router-dom";
 
-const Card = ({ title, stack, subject, id }: any) => {
+const Card = ({ title, stack, subject, id, name }: any) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -12,7 +12,7 @@ const Card = ({ title, stack, subject, id }: any) => {
   subject = subject.slice(0, 3);
   return (
     <div
-      className="flex flex-col h-64 w-72 cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-110"
+      className=" h-64 w-64 cursor-pointer transition-transform duration-300 hover:scale-110"
       onClick={handleCardClick}
     >
       <div className="flex bg-my-blue p-8 rounded-t-md relative">
@@ -31,10 +31,15 @@ const Card = ({ title, stack, subject, id }: any) => {
             <Item key={index} text={item} />
           ))}
         </div>
-        <div className="mb-4 flex gap-3 items-center justify-end">
-          {stack.map((item: any, index: any) => (
-            <DynamicImage key={index} imageName={item} />
-          ))}
+        <div className="flex justify-between items-center">
+          <div className="w-1/3 overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {name}
+          </div>
+          <div className="mb-4 flex gap-3 items-center justify-end">
+            {stack.map((item: any, index: any) => (
+              <DynamicImage key={index} imageName={item} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

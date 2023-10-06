@@ -8,9 +8,11 @@ import axios from "axios";
 import { postDetail } from "../types";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
+import { ReactComponent as RightSVG } from "../assets/chevron_right.svg";
+import { ReactComponent as LeftSVG } from "../assets/chevron_left.svg";
 
 const Main = () => {
-  const [classNum, setClassNum] = useState(0);
+  const [classNum, setClassNum] = useState("0");
   const [selected, setSelected] = useState<string[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(15);
@@ -28,7 +30,12 @@ const Main = () => {
   const handleOptionChange = (option: any) => {
     setClassNum(option);
   };
-
+  const curriculumIdMap: { [key: number]: string } = {
+    2: "풀스택 과정",
+    3: "정보 보안 전문가 양성 과정",
+    4: "쿠버네티스 과정",
+    5: "AI자연어처리 과정",
+  };
   const subStacks = [
     { value: "CS", label: "CS-스터디", type: "subject" },
     { value: "코딩 테스트", label: "코딩 테스트-스터디", type: "subject" },
@@ -90,49 +97,51 @@ const Main = () => {
   };
 
   const handlePrevPage = () => {
-    if (page > 1) {
+    if (page > 0) {
       handlePageChange(page - 1);
     }
   };
-  const [gridClass, setGridClass] = useState("grid-cols-4"); // 기본 클래스는 4열 그리드
+  const [gridClass, setGridClass] = useState("grid-cols-4");
 
   useEffect(() => {
     const handleResize = () => {
-      let newGridClass = "grid-cols-4"; // 기본 클래스 설정
+      let newGridClass = "grid-cols-1";
+
       switch (true) {
-        case window.innerWidth < 1150:
+        case window.innerWidth > 1150:
+          newGridClass = "grid-cols-4";
+          break;
+        case window.innerWidth > 840:
           newGridClass = "grid-cols-3";
           break;
-        case window.innerWidth < 840:
+        case window.innerWidth > 520:
           newGridClass = "grid-cols-2";
           break;
-        case window.innerWidth < 400:
-          newGridClass = "grid-cols-1";
-          break;
         default:
-          newGridClass = "grid-cols-4";
+          newGridClass = "grid-cols-1";
           break;
       }
 
       setGridClass(newGridClass);
+      console.log(window.innerWidth, newGridClass);
     };
 
-    // 창 크기가 변경될 때마다 handleResize 함수를 호출합니다.
     window.addEventListener("resize", handleResize);
 
-    // 컴포넌트가 언마운트될 때 리스너를 제거합니다.
+    handleResize();
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [window.innerWidth]);
+  }, []);
   if (!curriculumId) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="h-full flex justify-center">
-      <div className="flex flex-col w-full  max-w-7xl gap-5 pt-3 p-5">
-        <div className="flex justify-between items-center">
+    <div className="h-full w-full overflow-x-hidden flex justify-center">
+      <div className="flex  flex-col w-full  max-w-7xl gap-5 pt-3 p-5">
+        <div className="w-full flex justify-between items-center">
           <div>
             <ProjectStudySelector
               selectedOption={classNum}
@@ -157,18 +166,19 @@ const Main = () => {
             onChange={handleStackChange}
             name="Stacks"
           /> */}
-          <div className="flex">
+          <div className="flex justify-center items-center gap-2">
             <Toggle onToggle={setStatus} />
             <span>모집중만 보기</span>
           </div>
         </div>
         <div className="py-3 flex gap-3">
-          {selected.map((item) => (
+          {/* {selected.map((item) => (
             <Item text={item} />
-          ))}
+          ))} */}
+          {curriculumIdMap[curriculumId]}
         </div>
         <div
-          className={`grid gap-20 ${gridClass} justify-items-center items-center`}
+          className={`grid gap-10 ${gridClass} justify-items-center items-center`}
         >
           {post?.map((item, index) => (
             <Card
@@ -177,18 +187,27 @@ const Main = () => {
               title={item.title}
               stack={item.stack}
               subject={item.subject}
+              name={item.memberName}
             />
           ))}
         </div>
-        <div>
-          <button onClick={handlePrevPage} disabled={page === -1}>
-            Previous
+        <div className="flex justify-center items-center">
+          <button
+            onClick={handlePrevPage}
+            style={{ cursor: "pointer", marginRight: "10px" }}
+            disabled={page === -1}
+          >
+            <LeftSVG />
           </button>
           <span>
             Page {page} of {totalPages}
           </span>
-          <button onClick={handleNextPage} disabled={page === totalPages}>
-            Next
+          <button
+            onClick={handleNextPage}
+            style={{ cursor: "pointer", marginLeft: "10px" }}
+            disabled={page === totalPages}
+          >
+            <RightSVG />
           </button>
         </div>
       </div>

@@ -177,7 +177,7 @@ const PostDetail = () => {
                   }}
                 />
               )}
-              <div>모집일:{post.createdAt}</div>
+              <div>모집일:{post.createdAt.substring(0, 10)}</div>
             </div>
             <div className="bg-white flex flex-col rounded-lg border border-gray-300 shadow-lg gap-3 p-5">
               <div className="flex flex-col">
@@ -191,7 +191,7 @@ const PostDetail = () => {
                 <div className="flex flex-col w-1/2 ">
                   <div className="text-gray-400">모집 구분</div>
                   <div className="pl-4 pt-2">
-                    {post.classification ? "프로젝트" : "스터디"}
+                    {post.classification === "1" ? "프로젝트" : "스터디"}
                   </div>
                 </div>
                 <div className="flex flex-col">
@@ -207,17 +207,21 @@ const PostDetail = () => {
                 <div className="flex flex-col w-1/2 ">
                   <div className="text-gray-400">연락 방법</div>
                   <div className="pl-4 pt-2 whitespace-nowrap overflow-hidden text-ellipsis ">
-                    <a
-                      href={post.contactUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <BoxSVG
-                        className={cls(
-                          "w-5 aspect-square transition-all cursor-pointer"
-                        )}
-                      />
-                    </a>
+                    {post.contactUrl.includes("http") ? (
+                      <a
+                        href={post.contactUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <BoxSVG
+                          className={cls(
+                            "w-5 aspect-square transition-all cursor-pointer"
+                          )}
+                        />
+                      </a>
+                    ) : (
+                      <div className="pl-4 pt-2 "> {post.contactUrl}</div>
+                    )}
                   </div>
                 </div>
               </div>
