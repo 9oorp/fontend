@@ -25,8 +25,8 @@ const curriculumIdMap: { [key: string]: number } = {
   "AI자연어처리 과정": 5,
 };
 const classificationIdMap: { [key: string]: number } = {
-  프로젝트: 0,
-  스터디: 1,
+  스터디: 0,
+  프로젝트: 1,
 };
 const PostEdit = () => {
   const postId = useParams().id; // 포스트 ID를 React Router로부터 받아옵니다.

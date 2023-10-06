@@ -9,7 +9,8 @@ const Card = ({ title, stack, subject, id, name, status }: any) => {
   const handleCardClick = () => {
     navigate(`/post/${id}`);
   };
-
+  stack = stack.slice(0, 5);
+  subject = subject.slice(0, 2);
   // CSS 클래스를 조건부로 설정합니다.
 
   return (
