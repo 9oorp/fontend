@@ -146,7 +146,7 @@ const PostDetail = () => {
   };
   useEffect(() => {
     fetchData();
-    post?.status === "모집중" ? setSelected("모집중") : setSelected("모집종료");
+    post?.status === "0" ? setSelected("모집중") : setSelected("모집종료");
   }, [id, post?.status]);
 
   if (loading) {
