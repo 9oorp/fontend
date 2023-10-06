@@ -124,7 +124,6 @@ const Main = () => {
       }
 
       setGridClass(newGridClass);
-      console.log(window.innerWidth, newGridClass);
     };
 
     window.addEventListener("resize", handleResize);
@@ -200,6 +199,7 @@ const Main = () => {
                 stack={item.stack}
                 subject={item.subject}
                 name={item.memberName}
+                status={item.status}
               />
             ))}
           </div>
