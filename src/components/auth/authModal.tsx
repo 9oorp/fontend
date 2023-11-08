@@ -185,7 +185,7 @@ const AuthModal = ({ setModalOpen }: any) => {
                 name="name"
                 value={values.name}
                 onChange={handleChange}
-                placeholder="홍길동(풀스택4회차)"
+                placeholder="홍길동(풀스택 4회차)"
               />
             </div>
             <span className="text-red-600">{error}</span>
