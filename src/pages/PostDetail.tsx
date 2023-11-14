@@ -157,7 +157,7 @@ const PostDetail = () => {
     return <div>Error: {error}</div>;
   }
   return (
-    <div className="h-screen flex justify-center">
+    <div className="h-full pb-5 flex justify-center">
       <div className="flex w-full max-w-7xl flex-col px-10">
         {post && (
           <>
