@@ -70,7 +70,8 @@ const PostRegister = () => {
     };
     try {
       const response = await axios.post(
-        process.env.REACT_APP_DB_HOST + "/api/auth/refresh-token",
+        // process.env.REACT_APP_DB_HOST +
+        "/api/auth/refresh-token",
         null,
         {
           headers,
@@ -123,7 +124,8 @@ const PostRegister = () => {
     // Axios를 사용하여 POST 요청 보내기
     try {
       const response = await axios.post(
-        process.env.REACT_APP_DB_HOST + "/api/posts",
+        // process.env.REACT_APP_DB_HOST +
+        "/api/posts",
         requestData,
         { headers }
       );
@@ -139,7 +141,8 @@ const PostRegister = () => {
           };
 
           const newResponse = await axios.post(
-            process.env.REACT_APP_DB_HOST + "/api/posts",
+            // process.env.REACT_APP_DB_HOST +
+            "/api/posts",
             requestData,
             {
               headers: newHeaders,
