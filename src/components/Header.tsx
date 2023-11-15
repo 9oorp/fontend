@@ -19,8 +19,8 @@ const Header = () => {
     }
   };
   const handleClick = () => {
-    window.location.reload();
     navigate("/");
+    window.location.reload();
   };
   return (
     <>
@@ -33,7 +33,7 @@ const Header = () => {
           >
             <Hamburger />
           </div>
-          <Link to={"/"} onClick={() => handleClick}>
+          <Link to={"/"} onClick={handleClick}>
             <img src={logo} alt="logo" />
           </Link>
 
