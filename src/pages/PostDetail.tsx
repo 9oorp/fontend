@@ -9,6 +9,7 @@ import DynamicImage from "../components/dynamicImage";
 import { ReactComponent as BoxSVG } from "../assets/box-arrow-up-right.svg";
 import { cls } from "../libs/utils";
 import arrToString from "../libs/arrToString";
+import Comment from "../components/comment/Comment";
 
 const PostDetail = () => {
   const { id } = useParams<string>();
@@ -234,8 +235,11 @@ const PostDetail = () => {
                   <div className="flex flex-col">
                     <div className="text-gray-400">기술 스택</div>
                     <div className="pl-4 pt-2 flex gap-2">
-                      {post.stack.map((item, index) => (
-                        <DynamicImage key={index} imageName={item} />
+                      {post.stack.map((item: string, index) => (
+                        <DynamicImage
+                          key={index}
+                          imageName={item.toLowerCase()}
+                        />
                       ))}
                     </div>
                   </div>
@@ -245,11 +249,12 @@ const PostDetail = () => {
                   <div className="text-gray-400">what we do</div>
                   <div className="pl-4 pt-2 flex flex-wrap  gap-2">
                     {post.subject.map((item, index) => (
-                      <Item text={item} />
+                      <Item key={index} text={item} />
                     ))}
                   </div>
                 </div>
               </div>
+              {id && <Comment postId={parseInt(id)} />}
             </div>
             {user?.accountId === post?.accountId && (
               <div className="flex justify-center items-center py-5">

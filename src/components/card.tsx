@@ -54,7 +54,7 @@ const Card = ({ title, stack, subject, id, name, status }: any) => {
         <div className="flex justify-between items-center">
           <div className="mb-4 flex gap-3 items-center justify-center">
             {stack.map((item: any, index: any) => (
-              <DynamicImage key={index} imageName={item} />
+              <DynamicImage key={index} imageName={item.toLowerCase()} />
             ))}
           </div>
         </div>
