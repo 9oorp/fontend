@@ -77,7 +77,7 @@ const PostDetail = () => {
       const requestData = {
         classification: post?.classification,
         subject: arrToString(post?.subject || []), // Make sure to handle possible null or undefined values
-        stack: arrToString(post?.stack || []), // Make sure to handle possible null or undefined values
+        techStack: arrToString(post?.stack || []), // Make sure to handle possible null or undefined values
         recruitNum: post?.recruitNum || 0, // Make sure to handle possible null or undefined values
         curriculumId: curriculumId, // Make sure to define curriculumId
         contactUrl: post?.contactUrl || "",

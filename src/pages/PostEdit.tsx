@@ -172,7 +172,7 @@ const PostEdit = () => {
     const requestData = {
       classification: classificationId,
       subject: arrToString(formData.subject),
-      stack: arrToString(formData.stack),
+      techStack: arrToString(formData.stack),
       recruitNum: +formData.recruitNum,
       curriculumId: curriculumId,
       contactUrl: formData.contactUrl,

@@ -68,7 +68,7 @@ const Main = () => {
       try {
         const apiUrl =
           // process.env.REACT_APP_DB_HOST +
-          `/api/curriculum/${curriculumId}/posts?page=${page}&classification=${classNum}&sort=createdAt&status=${status}&search=${searchValue}`;
+          `/api/curriculum/${curriculumId}/posts?page=${page}&classification=STUDY&status=RECRUITING&search=${searchValue}`;
 
         const response = await axios.get(apiUrl);
 
@@ -196,7 +196,7 @@ const Main = () => {
                 key={index}
                 id={item.id}
                 title={item.title}
-                stack={item.stack}
+                stack={item.techStack}
                 subject={item.subject}
                 name={item.memberName}
                 status={item.status}

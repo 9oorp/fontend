@@ -9,9 +9,8 @@ const Card = ({ title, stack, subject, id, name, status }: any) => {
   const handleCardClick = () => {
     navigate(`/post/${id}`);
   };
-  stack = stack.slice(0, 5);
-  subject = subject.slice(0, 2);
-  // CSS 클래스를 조건부로 설정합니다.
+  stack = stack && stack.slice(0, 5);
+  subject = subject && subject.slice(0, 2);
 
   return (
     <div
@@ -47,15 +46,17 @@ const Card = ({ title, stack, subject, id, name, status }: any) => {
         </h2>
 
         <div className="mb-4 flex gap-3">
-          {subject.map((item: any, index: any) => (
-            <Item key={index} text={item} />
-          ))}
+          {subject &&
+            subject.map((item: any, index: any) => (
+              <Item key={index} text={item} />
+            ))}
         </div>
         <div className="flex justify-between items-center">
           <div className="mb-4 flex gap-3 items-center justify-center">
-            {stack.map((item: any, index: any) => (
-              <DynamicImage key={index} imageName={item.toLowerCase()} />
-            ))}
+            {stack &&
+              stack.map((item: any, index: any) => (
+                <DynamicImage key={index} imageName={item.toLowerCase()} />
+              ))}
           </div>
         </div>
         <div className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-end">

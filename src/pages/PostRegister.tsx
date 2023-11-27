@@ -111,7 +111,7 @@ const PostRegister = () => {
     const requestData = {
       classification: classificationId.toString(),
       subject: arrToString(formData.subject), //
-      stack: arrToString(formData.stack), //
+      techStack: arrToString(formData.stack), //
       recruitNum: +formData.recruitNum,
       curriculumId: curriculumId,
       contactUrl: formData.contactUrl,
