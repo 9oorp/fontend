@@ -55,5 +55,5 @@
     "@types/react-router-dom": "^5.3.3",
     "tailwindcss": "^3.3.3"
   },
-  "proxy": "http://43.202.116.84:80"
+  "proxy": "http://43.202.116.84:9000"
 }
