@@ -32,6 +32,8 @@ jobs:
         echo "REACT_APP_DB_HOST='${{ secrets.REACT_APP_DB_HOST }}'" > .env
         echo "PORT=${{ secrets.PORT }}" >> .env
 
-    - run: npm install
-    - run: npm run build --if-present
-    - run: npx serve -s build -l 3000
+    # - run: npm install
+    # - run: npm run build --if-present
+
+    # 애플리케이션을 직접 실행하지 않으므로 아래 줄은 주석 처리합니다
+    # - run: npx serve -s build -l 3000
