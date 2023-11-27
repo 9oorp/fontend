@@ -34,4 +34,4 @@ jobs:
 
     # - run: npm install
     # - run: npm run build --if-present
-     - run: npx serve -s build -l 3000 &
+    - run: npx serve -s build -l 3000 &
