@@ -9,6 +9,7 @@ import DynamicImage from "../components/dynamicImage";
 import { ReactComponent as BoxSVG } from "../assets/box-arrow-up-right.svg";
 import { cls } from "../libs/utils";
 import arrToString from "../libs/arrToString";
+import Comment from "../components/comment/Comment";
 
 const PostDetail = () => {
   const { id } = useParams<string>();
@@ -51,7 +52,8 @@ const PostDetail = () => {
         };
         try {
           const response = await axios.post(
-            process.env.REACT_APP_DB_HOST + "/api/auth/refresh-token",
+            // process.env.REACT_APP_DB_HOST +
+            "/api/auth/refresh-token",
             null,
             {
               headers,
@@ -75,7 +77,7 @@ const PostDetail = () => {
       const requestData = {
         classification: post?.classification,
         subject: arrToString(post?.subject || []), // Make sure to handle possible null or undefined values
-        stack: arrToString(post?.stack || []), // Make sure to handle possible null or undefined values
+        techStack: arrToString(post?.stack || []), // Make sure to handle possible null or undefined values
         recruitNum: post?.recruitNum || 0, // Make sure to handle possible null or undefined values
         curriculumId: curriculumId, // Make sure to define curriculumId
         contactUrl: post?.contactUrl || "",
@@ -91,7 +93,8 @@ const PostDetail = () => {
 
       // Send the PUT request with the headers
       const response = await axios.put(
-        process.env.REACT_APP_DB_HOST + `/api/posts/${id}`,
+        // process.env.REACT_APP_DB_HOST +
+        `/api/posts/${id}`,
         requestData,
         {
           headers,
@@ -108,7 +111,8 @@ const PostDetail = () => {
           };
 
           const newResponse = await axios.post(
-            process.env.REACT_APP_DB_HOST + "/api/posts",
+            // process.env.REACT_APP_DB_HOST +
+            "/api/posts",
             requestData,
             {
               headers: newHeaders,
@@ -128,7 +132,8 @@ const PostDetail = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        process.env.REACT_APP_DB_HOST + `/api/posts/${id}`
+        // process.env.REACT_APP_DB_HOST +
+        `/api/posts/${id}`
       );
 
       setPost(response.data.data.post);
@@ -157,7 +162,7 @@ const PostDetail = () => {
     return <div>Error: {error}</div>;
   }
   return (
-    <div className="h-screen flex justify-center">
+    <div className="h-full pb-5 flex justify-center">
       <div className="flex w-full max-w-7xl flex-col px-10">
         {post && (
           <>
@@ -230,8 +235,11 @@ const PostDetail = () => {
                   <div className="flex flex-col">
                     <div className="text-gray-400">기술 스택</div>
                     <div className="pl-4 pt-2 flex gap-2">
-                      {post.stack.map((item, index) => (
-                        <DynamicImage key={index} imageName={item} />
+                      {post.stack.map((item: string, index) => (
+                        <DynamicImage
+                          key={index}
+                          imageName={item.toLowerCase()}
+                        />
                       ))}
                     </div>
                   </div>
@@ -241,11 +249,12 @@ const PostDetail = () => {
                   <div className="text-gray-400">what we do</div>
                   <div className="pl-4 pt-2 flex flex-wrap  gap-2">
                     {post.subject.map((item, index) => (
-                      <Item text={item} />
+                      <Item key={index} text={item} />
                     ))}
                   </div>
                 </div>
               </div>
+              {id && <Comment postId={parseInt(id)} />}
             </div>
             {user?.accountId === post?.accountId && (
               <div className="flex justify-center items-center py-5">

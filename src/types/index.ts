@@ -24,6 +24,7 @@ export interface ToggleProps {
   onToggle?: (state: number) => void;
 }
 export interface postDetail {
+  techStack: [];
   accountId: string;
   classification: string;
   contactUrl: string;

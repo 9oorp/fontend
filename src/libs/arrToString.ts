@@ -3,7 +3,7 @@ export default function arrToString(arr: string[]): string {
   const sortedArr = arr.slice().sort();
 
   // 정렬된 배열의 요소를 문자열로 결합합니다.
-  const result = sortedArr.join(",");
+  const result = sortedArr.join(",").toUpperCase();
 
   return result;
 }
