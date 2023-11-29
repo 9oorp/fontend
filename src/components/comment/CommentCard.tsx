@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { commentRequest, commentResponse } from "../../types/commentType";
+import {
+  commentCreateRequest,
+  commentUpdateRequest,
+  commentResponse,
+} from "../../types/commentType";
 import { ReactComponent as ArrowSVG } from "../../assets/arrow-return-right.svg";
 
 import store from "../../store";
@@ -37,7 +41,7 @@ export default function CommentCard({
   const handleReplySubmit = async (e: React.FormEvent, content: string) => {
     e.preventDefault();
 
-    const requestData: commentRequest = {
+    const requestData: commentCreateRequest = {
       content: content,
       parentCommentId: comment.id,
     };
@@ -88,16 +92,15 @@ export default function CommentCard({
   ) => {
     e.preventDefault();
 
-    const requestData: commentRequest = {
+    const requestData: commentUpdateRequest = {
       content: content,
-      parentCommentId: comment.id,
     };
 
     // * update api가 없나??..
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         // process.env.REACT_APP_DB_HOST +
-        `${requests.fetchPost}/${postId}/comments`,
+        `${requests.fetchPost}/${postId}/comments/${comment.id}`,
         requestData,
         { headers }
       );
@@ -164,7 +167,7 @@ export default function CommentCard({
       <div className={`w-full px-6 py-4 ${borderClass} border-gray-150`}>
         <div className="flex items-baseline justify-between">
           <div className="flex items-center gap-3 pb-2">
-            <p className="font-medium text-medium">{comment.accountId}</p>
+            <p className="font-medium text-medium">{comment.name}</p>
             <p className="text-sm font-light text-gray-400">
               {comment.createdAt
                 .slice(0, 16)
@@ -173,11 +176,11 @@ export default function CommentCard({
             </p>
           </div>
 
-          {user?.memberName === comment.accountId && (
+          {user?.accountId === comment.accountId && (
             <div className="flex gap-2 text-sm">
-              {/* <button className="text-gray-400" onClick={() => setIsEdit(true)}>
+              <button className="text-gray-400" onClick={() => setIsEdit(true)}>
                 수정
-              </button> */}
+              </button>
               <button
                 className="text-red-300"
                 onClick={(e) => handleCommentDelete(e)}
