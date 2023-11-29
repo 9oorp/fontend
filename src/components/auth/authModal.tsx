@@ -28,8 +28,7 @@ const AuthModal = ({ setModalOpen }: any) => {
     if (toggle) {
       try {
         const response = await axios.post(
-          // process.env.REACT_APP_DB_HOST +
-          "/api/members/login",
+          process.env.REACT_APP_DB_HOST + "/api/members/login",
           {
             accountId: values.accountId,
             password: values.password,
@@ -64,8 +63,7 @@ const AuthModal = ({ setModalOpen }: any) => {
       // 회원가입
       try {
         const response = await axios.post(
-          // process.env.REACT_APP_DB_HOST +
-          "/api/members/join",
+          process.env.REACT_APP_DB_HOST + "/api/members/join",
           {
             accountId: values.accountId,
             password: values.password,
