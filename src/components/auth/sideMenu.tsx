@@ -117,7 +117,7 @@ const SideMenu = ({ setMenuOpen }: any) => {
 
   return (
     <div
-      className=" bg-white w-52 min-h-fit shadow-md rounded-lg fixed z-50 left-8 top-15 p-4 "
+      className=" bg-white w-60 min-h-fit shadow-md rounded-lg fixed z-50 left-8 top-15 p-4"
       ref={menuRef}
     >
       <div>
@@ -173,7 +173,7 @@ const SideMenu = ({ setMenuOpen }: any) => {
           <p>AI자연어처리 과정</p>
         </div>
         <hr className="pt-1" />
-        <div className="overflow-y-scroll flex-1">
+        <div>
           {post.map((post) => (
             <div
               key={post.id}
