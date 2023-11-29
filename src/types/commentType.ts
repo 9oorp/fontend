@@ -3,12 +3,16 @@ export interface commentResponse {
   content: string;
   createdAt: string;
   updatedAt: string;
-  memberId: string;
   accountId: string;
+  name: string;
   replies: commentResponse[];
 }
 
-export interface commentRequest {
+export interface commentCreateRequest {
   content: string;
   parentCommentId: number | null;
+}
+
+export interface commentUpdateRequest {
+  content: string;
 }

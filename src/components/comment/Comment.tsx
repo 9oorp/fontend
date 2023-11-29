@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import CommentCard from "./CommentCard";
 import axios from "axios";
 import requests from "../../api/requests";
-import { commentRequest, commentResponse } from "../../types/commentType";
+import { commentCreateRequest, commentResponse } from "../../types/commentType";
 import store from "../../store";
 import CommentInput from "./CommentInput";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ export default function Comment({ postId }: Props) {
     // 코멘트 수와 각 코멘트의 replies 길이를 합산하여 총 댓글 수를 구합니다.
     return total + 1 + comm.replies.length;
   }, 0);
-  const requestData: commentRequest = {
+  const requestData: commentCreateRequest = {
     content: comment,
     parentCommentId: null,
   };
