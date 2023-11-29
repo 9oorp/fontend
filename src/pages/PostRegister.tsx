@@ -248,11 +248,11 @@ const PostRegister = () => {
                 }
                 options={[
                   { value: "CS", label: "CS-스터디" },
-                  { value: "코딩 테스트", label: "코딩 테스트-스터디" },
-                  { value: "면접", label: "면접-스터디" },
-                  { value: "프론트엔드", label: "프론트엔드-프로젝트" },
-                  { value: "백엔드", label: "백엔드-프로젝트" },
-                  { value: "데브옵스", label: "데브옵스-프로젝트" },
+                  { value: "CODING_TEST", label: "코딩 테스트-스터디" },
+                  { value: "INTERVIEW", label: "면접-스터디" },
+                  { value: "FRONTEND", label: "프론트엔드-프로젝트" },
+                  { value: "BACKEND", label: "백엔드-프로젝트" },
+                  { value: "DEVOPS", label: "데브옵스-프로젝트" },
                   { value: "AI", label: "AI-프로젝트" },
                 ]}
                 placeholder="뭘 할지 선택해주세요"
@@ -272,15 +272,15 @@ const PostRegister = () => {
                   handleMultiSelectChange(selected, "stack")
                 }
                 options={[
-                  { value: "java", label: "java" },
-                  { value: "javascript", label: "javascript" },
-                  { value: "typescript", label: "typescript" },
-                  { value: "react", label: "react" },
-                  { value: "redux", label: "redux" },
-                  { value: "spring", label: "spring" },
-                  { value: "aws", label: "aws" },
-                  { value: "kubernetes", label: "kubernetes" },
-                  { value: "tensorflow", label: "tensorflow" },
+                  { value: "JAVA", label: "java" },
+                  { value: "JAVASCRIPT", label: "javascript" },
+                  { value: "TYPESCRIPT", label: "typescript" },
+                  { value: "REACT", label: "react" },
+                  { value: "REDUX", label: "redux" },
+                  { value: "SPRING", label: "spring" },
+                  { value: "AWS", label: "aws" },
+                  { value: "KUBERNETES", label: "kubernetes" },
+                  { value: "TENSORFLOW", label: "tensorflow" },
                 ]}
                 placeholder="기술 스택"
               />

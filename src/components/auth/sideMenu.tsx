@@ -173,18 +173,22 @@ const SideMenu = ({ setMenuOpen }: any) => {
         </div>
         <hr className="pt-1" />
         <div>
-          {post.map((post) => (
-            <div
-              key={post.id}
-              className="flex gap-2 py-2 items-center cursor-pointer "
-              onClick={() => navigate(`/post/${post.id}`)}
-            >
-              <div className="rounded-md bg-blue-500 w-7 h-7 text-center text-white">
-                {post.title[0]}
+          {post ? (
+            post.map((post) => (
+              <div
+                key={post.id}
+                className="flex gap-2 py-2 items-center cursor-pointer "
+                onClick={() => navigate(`/post/${post.id}`)}
+              >
+                <div className="rounded-md bg-blue-500 w-7 h-7 text-center text-white">
+                  {post.title[0]}
+                </div>
+                <div className="truncate">{post.title}</div>
               </div>
-              <div className="truncate">{post.title}</div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="truncate">프로젝트가 없습니다.</div>
+          )}
         </div>
         <hr className="pt-1" />
       </div>
