@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SingleSelect from "../components/singleSelect";
 import MultiSelect from "../components/multiSelect";
 import Input from "../components/Input";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import store from "../store";
 import { EditorState, ContentState, convertToRaw } from "draft-js";
 import { Editor as DraftEditor } from "react-draft-wysiwyg";
@@ -17,9 +17,9 @@ const curriculumIdMap: { [key: string]: number } = {
   "쿠버네티스 과정": 4,
   "AI자연어처리 과정": 5,
 };
-const classificationIdMap: { [key: string]: number } = {
-  스터디: 0,
-  프로젝트: 1,
+const classificationIdMap: { [key: string]: string } = {
+  스터디: "STUDY",
+  프로젝트: "PROJECT",
 };
 const PostRegister = () => {
   const [formData, setFormData] = useState({
@@ -105,31 +105,32 @@ const PostRegister = () => {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     };
+    console.log(headers);
     const curriculumId = curriculumIdMap[formData.curriculumId];
     const classificationId = classificationIdMap[formData.classification];
     // 요청 본문 데이터
     const requestData = {
-      classification: classificationId.toString(),
+      classification: classificationId,
       subject: arrToString(formData.subject), //
       techStack: arrToString(formData.stack), //
       recruitNum: +formData.recruitNum,
       curriculumId: curriculumId,
       contactUrl: formData.contactUrl,
       title: formData.title,
-      status: (0).toString(),
+      status: "RECRUITING",
       content: htmlContent,
       accountId: userId,
     };
-
+    console.log(requestData);
     // Axios를 사용하여 POST 요청 보내기
     try {
+      console.log(requestData);
       const response = await axios.post(
         // process.env.REACT_APP_DB_HOST +
         "/api/posts",
         requestData,
         { headers }
       );
-
       if (response.data.errorMessage === "토큰 만료") {
         const refreshToken = localStorage.getItem("refreshToken");
         if (refreshToken) {
@@ -148,6 +149,7 @@ const PostRegister = () => {
               headers: newHeaders,
             }
           );
+          console.log(newResponse);
         } else {
           // console.error(
           //   "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."
@@ -160,7 +162,7 @@ const PostRegister = () => {
         }
       }
     } catch (error) {
-      // console.error("POST 요청 실패", error);
+      console.error("POST 요청 실패", error);
     }
   };
   return (

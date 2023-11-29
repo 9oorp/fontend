@@ -16,12 +16,12 @@ const Card = ({ title, stack, subject, id, name, status }: any) => {
     <div
       className={cls(
         "h-64 w-64 cursor-pointer transition-transform duration-300 hover:scale-110",
-        status === "1" ? "opacity-50" : ""
+        status === "COMPLETED" ? "opacity-50" : ""
       )}
       onClick={handleCardClick}
     >
       <div className="flex bg-my-blue p-8 rounded-t-md relative">
-        {status === "0" ? (
+        {status === "RECRUITING" ? (
           ""
         ) : (
           <div className="absolute top-4 left-6">

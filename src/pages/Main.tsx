@@ -68,10 +68,13 @@ const Main = () => {
       try {
         const apiUrl =
           // process.env.REACT_APP_DB_HOST +
-          `/api/curriculum/${curriculumId}/posts?page=${page}&classification=STUDY&status=RECRUITING&search=${searchValue}`;
+          `/api/curriculum/${curriculumId}/posts?page=${page}&classification=${
+            classNum === "0" ? "STUDY" : "PROJECT"
+          }&status=${
+            status === 0 ? "RECRUITING" : "COMPLETED"
+          }&search=${searchValue}`;
 
         const response = await axios.get(apiUrl);
-
         if (response.status !== 200) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -79,6 +82,7 @@ const Main = () => {
         const data = response.data;
 
         setPost(data.data.posts);
+
         setTotalPages(Math.ceil(data.data.totalCount / 20));
       } catch (error) {
         // console.error("Error:", error);
