@@ -70,8 +70,7 @@ const PostRegister = () => {
     };
     try {
       const response = await axios.post(
-        // process.env.REACT_APP_DB_HOST +
-        "/api/auth/refresh-token",
+        process.env.REACT_APP_DB_HOST + "/api/auth/refresh-token",
         null,
         {
           headers,
@@ -105,7 +104,6 @@ const PostRegister = () => {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     };
-    console.log(headers);
     const curriculumId = curriculumIdMap[formData.curriculumId];
     const classificationId = classificationIdMap[formData.classification];
     // 요청 본문 데이터
@@ -121,13 +119,10 @@ const PostRegister = () => {
       content: htmlContent,
       accountId: userId,
     };
-    console.log(requestData);
     // Axios를 사용하여 POST 요청 보내기
     try {
-      console.log(requestData);
       const response = await axios.post(
-        // process.env.REACT_APP_DB_HOST +
-        "/api/posts",
+        process.env.REACT_APP_DB_HOST + "/api/posts",
         requestData,
         { headers }
       );
@@ -142,14 +137,12 @@ const PostRegister = () => {
           };
 
           const newResponse = await axios.post(
-            // process.env.REACT_APP_DB_HOST +
-            "/api/posts",
+            process.env.REACT_APP_DB_HOST + "/api/posts",
             requestData,
             {
               headers: newHeaders,
             }
           );
-          console.log(newResponse);
         } else {
           // console.error(
           //   "refresh token이 없습니다. 로그인 페이지로 이동하거나 다른 처리를 수행하세요."

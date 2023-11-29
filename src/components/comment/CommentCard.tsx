@@ -48,8 +48,8 @@ export default function CommentCard({
 
     try {
       const response = await axios.post(
-        // process.env.REACT_APP_DB_HOST +
-        `${requests.fetchPost}/${postId}/comments`,
+        process.env.REACT_APP_DB_HOST +
+          `${requests.fetchPost}/${postId}/comments`,
         requestData,
         { headers }
       );
@@ -65,8 +65,8 @@ export default function CommentCard({
           };
 
           const newResponse = await axios.post(
-            // process.env.REACT_APP_DB_HOST +
-            `${requests.fetchPost}/${postId}/comments`,
+            process.env.REACT_APP_DB_HOST +
+              `${requests.fetchPost}/${postId}/comments`,
             requestData,
             {
               headers: newHeaders,
@@ -99,8 +99,8 @@ export default function CommentCard({
     // * update api가 없나??..
     try {
       const response = await axios.put(
-        // process.env.REACT_APP_DB_HOST +
-        `${requests.fetchPost}/${postId}/comments/${comment.id}`,
+        process.env.REACT_APP_DB_HOST +
+          `${requests.fetchPost}/${postId}/comments/${comment.id}`,
         requestData,
         { headers }
       );
@@ -116,8 +116,8 @@ export default function CommentCard({
           };
 
           const newResponse = await axios.post(
-            // process.env.REACT_APP_DB_HOST +
-            `${requests.fetchPost}/${postId}/comments`,
+            process.env.REACT_APP_DB_HOST +
+              `${requests.fetchPost}/${postId}/comments`,
             requestData,
             {
               headers: newHeaders,

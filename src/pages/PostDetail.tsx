@@ -93,8 +93,7 @@ const PostDetail = () => {
 
       // Send the PUT request with the headers
       const response = await axios.put(
-        // process.env.REACT_APP_DB_HOST +
-        `/api/posts/${id}`,
+        process.env.REACT_APP_DB_HOST + `/api/posts/${id}`,
         requestData,
         {
           headers,
@@ -111,8 +110,7 @@ const PostDetail = () => {
           };
 
           const newResponse = await axios.post(
-            // process.env.REACT_APP_DB_HOST +
-            "/api/posts",
+            process.env.REACT_APP_DB_HOST + "/api/posts",
             requestData,
             {
               headers: newHeaders,
@@ -132,8 +130,7 @@ const PostDetail = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        // process.env.REACT_APP_DB_HOST +
-        `/api/posts/${id}`
+        process.env.REACT_APP_DB_HOST + `/api/posts/${id}`
       );
 
       setPost(response.data.data.post);

@@ -35,8 +35,8 @@ export default function Comment({ postId }: Props) {
   const fetchComments = async () => {
     try {
       const response = await axios.get(
-        // process.env.REACT_APP_DB_HOST +
-        `${requests.fetchPost}/${postId}/comments`
+        process.env.REACT_APP_DB_HOST +
+          `${requests.fetchPost}/${postId}/comments`
       );
 
       setComments(response.data.data.comments);
@@ -56,8 +56,8 @@ export default function Comment({ postId }: Props) {
 
     try {
       const response = await axios.post(
-        // process.env.REACT_APP_DB_HOST +
-        `${requests.fetchPost}/${postId}/comments`,
+        process.env.REACT_APP_DB_HOST +
+          `${requests.fetchPost}/${postId}/comments`,
         requestData,
         { headers }
       );
@@ -73,8 +73,8 @@ export default function Comment({ postId }: Props) {
           };
 
           const newResponse = await axios.post(
-            // process.env.REACT_APP_DB_HOST +
-            `${requests.fetchPost}/${postId}/comments`,
+            process.env.REACT_APP_DB_HOST +
+              `${requests.fetchPost}/${postId}/comments`,
             requestData,
             {
               headers: newHeaders,

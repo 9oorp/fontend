@@ -67,7 +67,7 @@ const Main = () => {
     const fetchData = async () => {
       try {
         const apiUrl =
-          // process.env.REACT_APP_DB_HOST +
+          process.env.REACT_APP_DB_HOST +
           `/api/curriculum/${curriculumId}/posts?page=${page}&classification=${
             classNum === "0" ? "STUDY" : "PROJECT"
           }&status=${

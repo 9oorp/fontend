@@ -99,8 +99,7 @@ const PostEdit = () => {
     const fetchPostData = async () => {
       try {
         const response = await axios.get(
-          // process.env.REACT_APP_DB_HOST +
-          `/api/posts/${postId}`
+          process.env.REACT_APP_DB_HOST + `/api/posts/${postId}`
         );
         const postData = response.data.data.post; // 포스트의 현재 내용을 가져옵니다.
         // 포스트 데이터를 폼 데이터에 설정합니다.
@@ -147,8 +146,7 @@ const PostEdit = () => {
       };
       try {
         const response = await axios.post(
-          // process.env.REACT_APP_DB_HOST +
-          "/api/auth/refresh-token",
+          process.env.REACT_APP_DB_HOST + "/api/auth/refresh-token",
           null,
           {
             headers,
@@ -184,8 +182,7 @@ const PostEdit = () => {
 
     try {
       const response = await axios.put(
-        // process.env.REACT_APP_DB_HOST +
-        `/api/posts/${postId}`,
+        process.env.REACT_APP_DB_HOST + `/api/posts/${postId}`,
         requestData,
         {
           headers,
@@ -202,8 +199,7 @@ const PostEdit = () => {
           };
 
           const newResponse = await axios.post(
-            // process.env.REACT_APP_DB_HOST +
-            "/api/posts",
+            process.env.REACT_APP_DB_HOST + "/api/posts",
             requestData,
             {
               headers: newHeaders,

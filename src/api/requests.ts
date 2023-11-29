@@ -1,5 +1,5 @@
 const requests = {
-  fetchPost: `${window.location.origin}/api/posts`,
+  fetchPost: `/api/posts`,
 };
 
 export default requests;
