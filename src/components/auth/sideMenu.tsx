@@ -10,7 +10,8 @@ import { ReactComponent as BoxArrowRightSVG } from "../../assets/box-arrow-right
 
 const SideMenu = ({ setMenuOpen }: any) => {
   const dispatch = useDispatch();
-  const user = store.getState().user.userData.memberName;
+  const user =
+    store.getState().user.userData && store.getState().user.userData.memberName;
   const [post, setPost] = useState<{ title: string; id: string }[]>([]);
   const navigate = useNavigate();
 
@@ -77,7 +78,7 @@ const SideMenu = ({ setMenuOpen }: any) => {
       };
       try {
         const apiUrl =
-          process.env.REACT_APP_DB_HOST +
+          // process.env.REACT_APP_DB_HOST +
           `/api/members/${store.getState().user.userData.accountId}/posts`;
 
         const response = await axios.get(apiUrl, { headers });
@@ -94,7 +95,7 @@ const SideMenu = ({ setMenuOpen }: any) => {
             };
 
             const apiUrl =
-              process.env.REACT_APP_DB_HOST +
+              // process.env.REACT_APP_DB_HOST +
               `/api/members/${store.getState().user.userData.accountId}/posts`;
 
             const response = await axios.get(apiUrl, { headers });
@@ -128,7 +129,10 @@ const SideMenu = ({ setMenuOpen }: any) => {
             <div className="truncate">{user}</div>
           </div>
         ) : (
-          <div>비로그인</div>
+          <div className="flex gap-2 py-2 items-center  ">
+            <div className="rounded-md bg-blue-500 px-2 py-1 text-white">♥</div>
+            로그인 해주세요~
+          </div>
         )}
         <hr className="pt-1" />
         <div
