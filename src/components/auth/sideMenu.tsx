@@ -78,7 +78,7 @@ const SideMenu = ({ setMenuOpen }: any) => {
       };
       try {
         const apiUrl =
-          // process.env.REACT_APP_DB_HOST +
+          process.env.REACT_APP_DB_HOST +
           `/api/members/${store.getState().user.userData.accountId}/posts`;
 
         const response = await axios.get(apiUrl, { headers });
@@ -95,7 +95,7 @@ const SideMenu = ({ setMenuOpen }: any) => {
             };
 
             const apiUrl =
-              // process.env.REACT_APP_DB_HOST +
+              process.env.REACT_APP_DB_HOST +
               `/api/members/${store.getState().user.userData.accountId}/posts`;
 
             const response = await axios.get(apiUrl, { headers });
